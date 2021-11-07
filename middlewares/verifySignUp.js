@@ -46,7 +46,7 @@ checkRolesExisted = (req, res, next) => {
         return;
       }
     }
-  }
+  } else {console.log("Json have not roles field")}
 
   next();
 };

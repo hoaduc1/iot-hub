@@ -59,6 +59,7 @@ app.get(
 
 async function main() {
   await mongoose.connect('mongodb://localhost:27017/iot-hub');
+  database.initial()
 
   const port = 3000;
   app.listen(port, () => {

@@ -2,19 +2,19 @@ const dbConfig = require("../config/db.config");
 const db = require("../db/models");
 const Role = db.role;
 
-module.exports.database_init = async (req, res) => {
-    db.mongoose.connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    }).then(() => {
-        console.log("Successfully connect to MongoDB.");
-        initial();
-    }).catch(err => {
-        console.error("Connection error", err);
-        process.exit();
-    });
+// module.exports.database_init = async (req, res) => {
+//     db.mongoose.connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
+//         useNewUrlParser: true,
+//         useUnifiedTopology: true
+//     }).then(() => {
+//         console.log("Successfully connect to MongoDB.");
+//         initial();
+//     }).catch(err => {
+//         console.error("Connection error", err);
+//         process.exit();
+//     });
 
-    initial = () =>{
+module.exports.initial = () =>{
         Role.estimatedDocumentCount((err, count) => {
         if (!err && count === 0) {
             new Role({
@@ -49,4 +49,4 @@ module.exports.database_init = async (req, res) => {
         }
         });
     }
-}
+// }

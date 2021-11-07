@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 // const User = require('./db/models/user.model');
 const db = require("./db/models");
 const User = db.user;
-const Role = db.role;
+// const Role = db.role;
 
 
 
@@ -65,6 +65,7 @@ module.exports.logIn = async (req, res) => {
     res.write(JSON.stringify({
       msgCode: 10700,
       msgResp: {
+        roles: authorities,
         token: token
       }
     }));
