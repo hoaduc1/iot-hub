@@ -1,23 +1,52 @@
-const { application } = require('express');
-let mongoose = require('mongoose');
+const dbConfig = require("../config/db.config");
+const db = require("../db/models");
+const Role = db.role;
 
-const mongodb_url = 'mongodb://localhost:27017/nodejs-demo'
+module.exports.database_init = async (req, res) => {
+    db.mongoose.connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    }).then(() => {
+        console.log("Successfully connect to MongoDB.");
+        initial();
+    }).catch(err => {
+        console.error("Connection error", err);
+        process.exit();
+    });
 
-class Database {
-    constructor() {
-        this._connect()
-    }
-
-    _connect() {
-        mongoose.connect(mongodb_url, {useNewUrlParser: true})
-            .then(() => {
-                console.log("Database connection successfully!");
-                app.initial();
-            })
-            .catch(err => {
-                console.log("Database connection error!");
-            })
+    initial = () =>{
+        Role.estimatedDocumentCount((err, count) => {
+        if (!err && count === 0) {
+            new Role({
+            name: "user"
+            }).save(err => {
+            if (err) {
+                console.log("error", err);
+            }
+    
+            console.log("added 'user' to roles collection");
+            });
+    
+            new Role({
+            name: "moderator"
+            }).save(err => {
+            if (err) {
+                console.log("error", err);
+            }
+    
+            console.log("added 'moderator' to roles collection");
+            });
+    
+            new Role({
+            name: "admin"
+            }).save(err => {
+            if (err) {
+                console.log("error", err);
+            }
+    
+            console.log("added 'admin' to roles collection");
+            });
+        }
+        });
     }
 }
-
-module.exports = new Database();
