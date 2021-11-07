@@ -4,6 +4,7 @@ const getUser = require('./get-user');
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+const mongoose = require('mongoose');
 const { verifySignUp } = require("./middlewares");
 const database = require("./db/database");
 const controller = require("./controllers/user.controller");
@@ -17,8 +18,6 @@ app.use(function (req, res, next) {
   res.setHeader('x-powered-by', 'Django'); // Purposely misleading
   next();
 });
-
-database.database_init();
 
 app.get('/', (req, res) => {
   res.writeHead(200, {});
@@ -56,8 +55,18 @@ app.get(
   controller.adminBoard
 );
 
-const port = 3000;
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
-});
+// database.database_init();
+
+async function main() {
+  await mongoose.connect('mongodb://localhost:27017/iot-hub');
+
+  const port = 3000;
+  app.listen(port, () => {
+    console.log(`Example app listening at http://localhost:${port}`);
+  });
+}
+
+main();
+
+
 
