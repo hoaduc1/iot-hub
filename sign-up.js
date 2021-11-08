@@ -1,7 +1,6 @@
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
-const config = require("./config/auth.config");
 const db = require("./db/models");
 const User = db.user;
 const Role = db.role;

@@ -1,17 +1,23 @@
+const fs = require('fs');
 const jwt = require("jsonwebtoken");
-const config = require("../config/auth.config.js");
 const db = require("../db/models");
 const User = db.user;
 const Role = db.role;
 
 verifyToken = (req, res, next) => {
-  let token = req.headers["x-access-token"];
-
+  let token = req.headers["authorization"];
+  // var token = req.header('Authorization');
   if (!token) {
     return res.status(403).send({ message: "No token provided!" });
+  } else {
+    token = token.replace('Bearer ', '');
+    // console.log(token);
   }
 
-  jwt.verify(token, config.secret, (err, decoded) => {
+  var cert = fs.readFileSync('./jwt-cert/jwt.crt');
+  jwt.verify(token, cert, (err, decoded) => {
+    // console.log(cert);
+    // console.log(decoded);
     if (err) {
       return res.status(401).send({ message: "Unauthorized!" });
     }
@@ -57,7 +63,9 @@ isModerator = (req, res, next) => {
       res.status(500).send({ message: err });
       return;
     }
-
+    
+    console.log(req.headers);
+    console.log(req.body);
     Role.find(
       {
         _id: { $in: user.roles }

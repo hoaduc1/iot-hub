@@ -42,9 +42,9 @@ app.get('/get-user', getUser.getUser);
 
 app.get("/api/test/all", controller.allAccess);
 
-app.get("/api/test/user", [authJwt.verifyToken], controller.userBoard);
+app.get("/test-user", [authJwt.verifyToken], controller.userBoard);
 
-app.get("/api/test/mod",
+app.get("/test-mod",
   [authJwt.verifyToken, authJwt.isModerator],
   controller.moderatorBoard
 );

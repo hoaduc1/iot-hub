@@ -4,6 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 
 module.exports.getUser = async (req, res) => {
     var token = req.header('Authorization');
+    console.log(token);
     if (token) {
       token = token.replace('Bearer ', '');
     }
