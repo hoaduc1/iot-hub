@@ -41,18 +41,18 @@ module.exports.logIn = async (req, res) => {
     var privKey = fs.readFileSync('./jwt-cert/jwt.key');
     var payload = {
         iss: 'db-iot',
-        sub: 'O=dbiot.io,E=' + User.email,
-        aud: User.email,
+        sub: 'O=dbiot.io,E=' + user.email,
+        aud: user.email,
         jti: uuidv4(),
         exp: Math.floor(Date.now() / 1000) + 3600,
         iat: Math.floor(Date.now() / 1000),
-        uid: User.id,
+        uid: user.id,
         version: 1,
-        name: User.name,
-        email: User.email,
-        phone: User.phone,
-        postalCode: User.postalCode,
-        photoUrl: User.photoUrl,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        postalCode: user.postalCode,
+        photoUrl: user.photoUrl,
     };
     var token = jwt.sign(payload, privKey, {algorithm: 'ES256'});
 
@@ -65,6 +65,7 @@ module.exports.logIn = async (req, res) => {
     res.write(JSON.stringify({
       msgCode: 10700,
       msgResp: {
+        uid: user.id,
         roles: authorities,
         token: token
       }
