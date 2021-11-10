@@ -26,7 +26,7 @@ module.exports.getUser = async (req, res) => {
 
     var user = {
 
-    };
+    } = decoded;
 
     res.writeHead(200, {});
     res.write(JSON.stringify({

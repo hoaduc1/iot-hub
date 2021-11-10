@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const app = express();
 const mongoose = require('mongoose');
 const { verifySignUp } = require("./middlewares");
-const database = require("./db/database");
+const initRoles = require("./db/init-roles");
 const controller = require("./controllers/user.controller");
 const { authJwt } = require("./middlewares");
 app.use(bodyParser.json());
@@ -49,8 +49,7 @@ app.get("/test-mod",
   controller.moderatorBoard
 );
 
-app.get(
-  "/api/test/admin",
+app.get("/test-admin",
   [authJwt.verifyToken, authJwt.isAdmin],
   controller.adminBoard
 );
@@ -59,7 +58,8 @@ app.get(
 
 async function main() {
   await mongoose.connect('mongodb://localhost:27017/iot-hub');
-  database.initial()
+  console.log("Successfully connect to MongoDB.");
+  initRoles.initial()
 
   const port = 3000;
   app.listen(port, () => {

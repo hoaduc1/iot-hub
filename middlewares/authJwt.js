@@ -11,17 +11,16 @@ verifyToken = (req, res, next) => {
     return res.status(403).send({ message: "No token provided!" });
   } else {
     token = token.replace('Bearer ', '');
-    // console.log(token);
   }
 
   var cert = fs.readFileSync('./jwt-cert/jwt.crt');
   jwt.verify(token, cert, (err, decoded) => {
-    // console.log(cert);
-    // console.log(decoded);
+    // console.log(cert); console.log(decoded);
     if (err) {
       return res.status(401).send({ message: "Unauthorized!" });
     }
-    req.userId = decoded.id;
+    req.userId = decoded.uid;
+    console.log(req.userId);
     next();
   });
 };
@@ -32,7 +31,7 @@ isAdmin = (req, res, next) => {
       res.status(500).send({ message: err });
       return;
     }
-
+    console.log(user);
     Role.find(
       {
         _id: { $in: user.roles }
