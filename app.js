@@ -1,6 +1,7 @@
 const logIn = require('./log-in');
 const signUp = require('./sign-up');
 const getUser = require('./get-user');
+const productsManager = require('./products-manager');
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
@@ -40,7 +41,7 @@ app.post('/sign-up',
 
 app.get('/get-user', getUser.getUser);
 
-app.get("/api/test/all", controller.allAccess);
+app.get("/api/test-all", controller.allAccess);
 
 app.get("/test-user", [authJwt.verifyToken], controller.userBoard);
 
@@ -54,7 +55,26 @@ app.get("/test-admin",
   controller.adminBoard
 );
 
-// database.database_init();
+/* List all Product */
+app.get('/product-list', productsManager.productsList);
+
+/* Add new Product */
+app.post('/add-product', 
+  [authJwt.verifyToken, authJwt.isAdmin], 
+  productsManager.addProduct
+);
+
+/* Update product */
+app.post('/update-product' , 
+  [authJwt.verifyToken, authJwt.isAdmin],
+  productsManager.updateProduct
+);
+
+/* Delete product */
+app.delete('/delete-product',
+  [authJwt.verifyToken, authJwt.isAdmin],
+  productsManager.deleteProduct
+);
 
 async function main() {
   await mongoose.connect('mongodb://localhost:27017/iot-hub');
